@@ -1,0 +1,28 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+        x:Class="CASCRS_Voucher_Import.SystemConfig"
+        mc:Ignorable="d"
+        Title="系统配置" Height="360.907" Width="606.941" WindowStyle="ThreeDBorderWindow" Loaded="Window_Loaded">
+    <Grid>
+        <Label x:Name="lblServer" Content="服务器" HorizontalAlignment="Left" Margin="80,40,0,0" VerticalAlignment="Top" Width="55" Height="25"/>
+        <Label x:Name="lblDbPassword" Content="数据库密码" HorizontalAlignment="Left" Margin="60,85,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
+        <Label x:Name="lblMiddleAccId" Content="中间帐套号" HorizontalAlignment="Left" Margin="60,135,0,0" VerticalAlignment="Top" Width="65" Height="25"/>
+        <Label x:Name="lblMiddleAccYear" Content="中间帐套年份" HorizontalAlignment="Left" Margin="360,135,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
+        <Button x:Name="btnCancel" Content="取消" HorizontalAlignment="Left" Margin="450,275,0,0" VerticalAlignment="Top" Width="110" Height="34" TabIndex="9" Click="btnCancel_Click"/>
+        <Button x:Name="btnConfirm" Content="确认" HorizontalAlignment="Left" Margin="335,275,0,0" VerticalAlignment="Top" Width="110" Height="34" TabIndex="8" Click="btnConfirm_Click"/>
+        <TextBox x:Name="txtServer" HorizontalAlignment="Left" Height="25" Margin="140,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="420" TabIndex="1"/>
+        <TextBox x:Name="txtMiddleAccId" HorizontalAlignment="Left" Height="25" Margin="140,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" TabIndex="3"/>
+        <TextBox x:Name="txtMiddleAccYear" HorizontalAlignment="Left" Height="25" Margin="440,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TabIndex="4"/>
+        <dxe:PasswordBoxEdit x:Name="txtDbPassword" HorizontalAlignment="Left" Margin="140,85,0,0" VerticalAlignment="Top" Width="420" Height="25" TabIndex="2"/>
+        <Label Name="lblDbName" Content="数据库名" HorizontalAlignment="Left" Margin="70,226,0,0" VerticalAlignment="Top" Height="24" Width="65" TabIndex="7"/>
+        <TextBox Name="txtDbName" HorizontalAlignment="Left" Height="23" Margin="140,226,0,0" TextWrapping="Wrap" Text="CASCRS_VOUCHER" VerticalAlignment="Top" Width="130"/>
+        <Label Name="lblTargetAccId" Content="目标帐套号" HorizontalAlignment="Left" Margin="60,186,0,0" VerticalAlignment="Top" Width="65"/>
+        <TextBox Name="txtTargetAccId" HorizontalAlignment="Left" Height="23" Margin="140,186,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" TabIndex="5"/>
+        <Label Name="lblTargetAccYear" Content="目标帐套年份" HorizontalAlignment="Left" Margin="360,186,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBox Name="txtTargetAccYear" HorizontalAlignment="Left" Height="23" Margin="440,186,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TabIndex="6"/>
+    </Grid>
+</Window>

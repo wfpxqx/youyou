@@ -1,0 +1,47 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxlc1="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+        mc:Ignorable="d" x:Class="CASCRS_Voucher_Import.Common.CommWindow.SearchWindow"
+        Height="480" Width="640" Title="筛选条件设置" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" ResizeMode="NoResize">
+    <Grid Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Height="451" VerticalAlignment="Top" Margin="0,0,0,-1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="115*"/>
+            <ColumnDefinition Width="43*"/>
+        </Grid.ColumnDefinitions>
+
+        <dxlc1:GroupBox x:Name="gbxConditionInput" Margin="10,10,10,350" Header="条件输入" FontWeight="Bold" Grid.ColumnSpan="2"/>
+        <Label x:Name="lblField_" Content="字段名称" HorizontalAlignment="Left" Margin="20,35,0,0" VerticalAlignment="Top" Width="100"/>
+
+        <dxe:ComboBoxEdit x:Name="cbxField" DisplayMember="Value" ValueMember="Key" Margin="20,61,340,368" SelectedIndexChanged="cbxField_SelectedIndexChanged"/>
+        <Label x:Name="lblOperator" Content="运算符" HorizontalAlignment="Left" Margin="140,34,0,393" RenderTransformOrigin="0.375,-2.5"/>
+        <dxe:ComboBoxEdit x:Name="cbxOperator" Margin="140,61,200,368" Text="等于"/>
+        <Label x:Name="lblValue" Content="值" Margin="277,34,0,393" HorizontalAlignment="Left" Width="22"/>
+        <dxe:TextEdit x:Name="txtValue" Margin="277,61,0,368"/>
+        <Label x:Name="lblLogicalRelation" Content="逻辑关系" Margin="0,35,96.667,390" Grid.Column="1" HorizontalAlignment="Right" Width="58"/>
+        <dxe:ComboBoxEdit x:Name="cbxLogicRelation" Margin="17,61,97,368" Text="并且" Grid.Column="1"/>
+        <Button x:Name="btnAdd" Content="增加条件" Margin="80,50,17,368" Click="btnAdd_Click" Grid.Column="1"/>
+        <dxlc1:GroupBox x:Name="gbxConditionList" Header="条件列表" Margin="10,105,10,145" FontWeight="Bold" Grid.ColumnSpan="2"/>
+
+        <dxg:GridControl x:Name="gcCondtion" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True" Margin="20,135,97,156" AllowLiveDataShaping="True" Grid.ColumnSpan="2" SelectionMode="Row" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <dxg:GridControl.CacheMode>
+                <BitmapCache EnableClearType="True"/>
+            </dxg:GridControl.CacheMode>
+            <dxg:GridControl.View>
+                <dxg:TableView ShowTotalSummary="True" ShowGroupPanel="False" IsGroupFooterMenuEnabled="False" IsGroupPanelMenuEnabled="False" Height="152"/>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+        <Button x:Name="btnDelete" Content="删除条件" Margin="80,195,17,223" Grid.Column="1" Click="btnDelete_Click"/>
+        <Button x:Name="btnReverse" Content="条件取反" Margin="80,135,17,283" Grid.Column="1" Click="btnReverse_Click"/>
+        <Button x:Name="btnClear" Content="条件清空" Margin="80,262,17,156" Grid.Column="1" Click="btnClear_Click"/>
+        <dxlc1:GroupBox Header="条件表达式" Margin="10,310,10,10" FontWeight="Bold" Grid.ColumnSpan="2"/>
+        <Button x:Name="btnExecute" Content="执行筛选" Margin="80,342,17,76" Grid.Column="1" Click="btnExecute_Click"/>
+        <Button x:Name="btnClose" Content="放弃返回" Margin="80,395,17,23" Grid.Column="1" Click="btnClose_Click"/>
+        <dxe:TextEdit x:Name="txtConditionExpression" Margin="20,342,97,23" VerticalContentAlignment="Top" Grid.ColumnSpan="2" IsReadOnly="True"/>
+        <dxe:DateEdit x:Name="dteValue" HorizontalAlignment="Left" Margin="277,61,0,0" VerticalAlignment="Top" Width="185"/>
+    </Grid>
+</Window>

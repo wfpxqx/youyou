@@ -1,0 +1,26 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+        x:Class="CASCRS_Voucher_Import.Login"
+        mc:Ignorable="d"
+        Title="中科帐套导入工具" Height="321.278" Width="402.32" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" ResizeMode="NoResize" Loaded="Window_Loaded">
+    <Grid>
+        <Label x:Name="lblLoginId" Content="用户ID" HorizontalAlignment="Left" Margin="55,90,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblLoginPassword" Content="用户密码" HorizontalAlignment="Left" Margin="45,130,0,0" VerticalAlignment="Top" Width="50"/>
+        <Label x:Name="lblLoginDate" Content="登录日期" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Width="50"/>
+        <TextBox x:Name="txtLoginId" HorizontalAlignment="Left" Height="23" Margin="100,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="230" TabIndex="1" PreviewKeyUp="txtLoginId_PreviewKeyUp"/>
+        <Button x:Name="btnSystemConfig" Content="系统设置" HorizontalAlignment="Left" Margin="248,224,0,0" VerticalAlignment="Top" Width="82" Height="32" TabIndex="5" Click="btnSystemConfig_Click"/>
+        <Button x:Name="btnConfirm" Content="确认" HorizontalAlignment="Left" Margin="100,224,0,0" VerticalAlignment="Top" Width="85" Height="32" TabIndex="4" Click="btnConfirm_Click"/>
+        <dxe:DateEdit x:Name="dteLoginDate" HorizontalAlignment="Left" Margin="100,175,0,0" VerticalAlignment="Top" Width="230" IsTextEditable="True" Mask="D" TabIndex="3">
+            <dxe:DateEdit.StyleSettings>
+                <dxe:DateEditCalendarStyleSettings/>
+            </dxe:DateEdit.StyleSettings>
+        </dxe:DateEdit>
+        <Label x:Name="lblMainTitle" Content="登录" HorizontalAlignment="Left" Margin="184,25,0,0" VerticalAlignment="Top" Height="45" Width="62" FontSize="30"/>
+        <dxe:PasswordBoxEdit x:Name="txtLoginPassword" HorizontalAlignment="Left" Margin="100,130,0,0" VerticalAlignment="Top" Width="230" PreviewKeyUp="txtLoginPassword_PreviewKeyUp" TabIndex="2"/>
+
+    </Grid>
+</Window>
