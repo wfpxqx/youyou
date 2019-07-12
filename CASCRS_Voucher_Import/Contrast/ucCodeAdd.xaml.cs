@@ -397,7 +397,7 @@ namespace CASCRS_Voucher_Import.Contrast
                         dr["middleCodeName"] = drc[0][1];
                     dr.EndEdit();
                 }
-                else if (strHeader == "贷方帐套科目编码")
+                else if (strHeader == "贷方科目编码")
                 {
                     DataRow[] drc = dtTargetCode.Select(string.Format("ccode = '{0}'", e.Value));
                     dr.BeginEdit();
