@@ -596,15 +596,18 @@ namespace CASCRS_Voucher_Import
                 sbSQL.AppendLine("	 ,iperiod");
                 sbSQL.AppendLine("	 ,iyear");
                 sbSQL.AppendLine("	 ,ino_id AS real_inoid");
-
                 sbSQL.AppendLine("FROM");
                 sbSQL.AppendLine("    dbo.GL_accvouch");
                 sbSQL.AppendLine("   inner join ");
                 sbSQL.AppendLine("  CASCRS_VOUCHER.dbo.DeptItemContrast ");
                 sbSQL.AppendLine("   on ");
-
                 sbSQL.AppendLine("   GL_accvouch.cdept_id= CASCRS_VOUCHER.dbo.DeptItemContrast.deptId");
-               
+
+                sbSQL.AppendLine("   inner join ");
+                sbSQL.AppendLine("  CASCRS_VOUCHER.dbo.CodeContrast ");
+                sbSQL.AppendLine("   on ");
+                sbSQL.AppendLine("   GL_accvouch.ccode= CASCRS_VOUCHER.dbo.CodeContrast.middleCode");
+
                 sbSQL.AppendLine("WHERE");
                 sbSQL.AppendLine("    cDefine11 IS NULL");
                 sbSQL.AppendLine("AND");
@@ -777,7 +780,7 @@ namespace CASCRS_Voucher_Import
                     if (drcTargetCode.Length > 0)
                     {
                         drVD["ccode"] = strTargetCode;
-                        drVD["cdigest"] = strTargetName;
+                        //drVD["cdigest"] = strTargetName;//摘要无需更改
                         bItem = Convert.ToBoolean(drcTargetCode[0]["bitem"]);
                         bDept = Convert.ToBoolean(drcTargetCode[0]["bdept"]);
                     }
@@ -807,6 +810,7 @@ namespace CASCRS_Voucher_Import
                 SqlCommand objSqlCmd = new SqlCommand() { Connection = objSqlConn };
                 int inoid = 1;
                 int iPeriod_Ref = -1;
+                int totals = 0;
                 foreach (DataRow drVH in dtVoucherHeader.Rows)
                 {
                     int iPeriod = Convert.ToInt32(drVH["iperiod"]);
@@ -852,6 +856,7 @@ namespace CASCRS_Voucher_Import
                             drVD["inid"] = objInid;
                             drVD["ino_id"] = objInoid;
                             drVD.EndEdit();
+
                         }
                         else
                         {
@@ -900,6 +905,7 @@ namespace CASCRS_Voucher_Import
                             drVDPrev["citem_id"] = DBNull.Value;
                            
                             drVDPrev.EndEdit();
+                            totals += 1;
                         }
 
                     }
@@ -920,7 +926,7 @@ namespace CASCRS_Voucher_Import
                 DbOperation.ExecuteSqlBulkCopy(dtVoucherCash, "GL_CashTable", 2);
                 UserControl_Loaded(new object(), new RoutedEventArgs());
                 IsImportEnded = true;
-                System.Windows.MessageBox.Show("导入完成", "信息", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.MessageBox.Show(string.Format ("导入完成,本次导入{0}条凭证",totals ), "信息", MessageBoxButton.OK, MessageBoxImage.Information);
                 generate_Click(sender,  e);
             }
             catch (Exception ex)

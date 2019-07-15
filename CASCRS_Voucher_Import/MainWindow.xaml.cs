@@ -116,56 +116,57 @@ namespace CASCRS_Voucher_Import
       
 		private void MainTreeView_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			try
-			{
-				object objCurrentItem = MainTreeView.SelectedItem;
-				if (objCurrentItem == null)
-					return;
-				TreeViewItem tviCurrentItem = (TreeViewItem)objCurrentItem;
-				if (tviCurrentItem.Items.Count > 0)
-					return;
-				string strHeader = tviCurrentItem.Header.ToString();
-				DXTabItem tabItem = null;
-				bool Visible = UICheck.CheckDXTabControlVisible(MainTabControl);
-				if (!Visible)
-					MainTabControl.Visibility = Visibility.Visible;
-				bool HasItem = UICheck.CheckDXTabControlRepeatItem(strHeader, MainTabControl, out tabItem);
-				if (HasItem)
-				{
-					tabItem.IsSelected = true;
-					tabItem.Focus();
-					return;
-				}
-				switch (strHeader)
-				{
-					case "会计科目对照":
-						tabItem = new DXTabItem() { Header = strHeader, Content = new ucCodeContrast() };
-						break;
-					case "部门-项目核算对照":
-						tabItem = new DXTabItem() { Header = strHeader, Content = new ucDeptItemContrast() };
-						break;
-					case "凭证导入":
-						tabItem = new DXTabItem() { Header = strHeader, Content = new ucVoucherImport() };
-						break;
+            try
+            {
+                object objCurrentItem = MainTreeView.SelectedItem;
+                if (objCurrentItem == null)
+                    return;
+                TreeViewItem tviCurrentItem = (TreeViewItem)objCurrentItem;
+                if (tviCurrentItem.Items.Count > 0)
+                    return;
+                string strHeader = tviCurrentItem.Header.ToString();
+                DXTabItem tabItem = null;
+                bool Visible = UICheck.CheckDXTabControlVisible(MainTabControl);
+                if (!Visible)
+                    MainTabControl.Visibility = Visibility.Visible;
+                bool HasItem = UICheck.CheckDXTabControlRepeatItem(strHeader, MainTabControl, out tabItem);
+                if (HasItem)
+                {
+                    //tabItem.IsSelected = true;
+                    //tabItem.Focus();
+                    //return;
+                    MainTabControl.Items.Remove(tabItem);
+                }
+                switch (strHeader)
+                {
+                    case "会计科目对照":
+                        tabItem = new DXTabItem() { Header = strHeader, Content = new ucCodeContrast() };
+                        break;
+                    case "部门-项目核算对照":
+                        tabItem = new DXTabItem() { Header = strHeader, Content = new ucDeptItemContrast() };
+                        break;
+                    case "凭证导入":
+                        tabItem = new DXTabItem() { Header = strHeader, Content = new ucVoucherImport() };
+                        break;
                     case "凭证生成":
                         tabItem = new DXTabItem() { Header = strHeader, Content = new ucVoucherGenerate() };
                         break;
                     case "目标账套科目设置":
-                        tabItem = new DXTabItem() { Header = strHeader, Content = new ucCodeAdd () };
+                        tabItem = new DXTabItem() { Header = strHeader, Content = new ucCodeAdd() };
                         break;
                 }
-				if (tabItem == null)
-					return;
-				tabItem.Style = (Style)FindResource("DXTabItem_Style");
-				MainTabControl.Items.Add(tabItem);
-				MainTabControl.SelectedItem = tabItem;
-			}
-			catch (Exception ex)
-			{
-				tc.TrackException(ex);
-				tc.TrackTrace(ex.Message);
-				MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-			}
+                if (tabItem == null)
+                    return;
+                tabItem.Style = (Style)FindResource("DXTabItem_Style");
+                MainTabControl.Items.Add(tabItem);
+                MainTabControl.SelectedItem = tabItem;
+            }
+            catch (Exception ex)
+            {
+                tc.TrackException(ex);
+                tc.TrackTrace(ex.Message);
+                MessageBox.Show(ex.Message, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 		}
 
 		private void btnTabClose_Click(object sender, RoutedEventArgs e)

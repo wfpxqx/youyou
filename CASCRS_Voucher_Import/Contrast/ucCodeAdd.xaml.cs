@@ -241,22 +241,23 @@ namespace CASCRS_Voucher_Import.Contrast
                 if (RowCount > 0)
                 {
                     DataRow drLast = CodeCstDataSource.Rows[RowCount - 1];
-                    string strMiddleCode = drLast["middleCode"].ToString();
-                    if (string.IsNullOrWhiteSpace(strMiddleCode))
-                    {
-                        MessageBox.Show("借方科目编码不能为空。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
+                    //string strMiddleCode = drLast["middleCode"].ToString();
+                    //if (string.IsNullOrWhiteSpace(strMiddleCode))
+                    //{
+                    //    MessageBox.Show("借方科目编码不能为空。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    //    return;
+                    //}
                     string strTargetCode = drLast["targetCode"].ToString();
                     if (string.IsNullOrWhiteSpace(strTargetCode))
                     {
                         MessageBox.Show("贷方科目编码不能为空。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
-                    DataRow[] drc = CodeCstDataSource.Select(string.Format("middleCode = '{0}' AND targetCode = '{1}'", strMiddleCode, strTargetCode));
+                    //middleCode = '{0}' AND 
+                    DataRow[] drc = CodeCstDataSource.Select(string.Format("targetCode = '{1}'",  strTargetCode));
                     if (drc.Length > 1)
                     {
-                        MessageBox.Show(string.Format("借方科目编码{0}贷方科目编码{1}的行存在若干重复行", strMiddleCode, strTargetCode), "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show(string.Format("贷方科目编码{0}的行存在若干重复行",  strTargetCode), "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                 }
@@ -304,22 +305,22 @@ namespace CASCRS_Voucher_Import.Contrast
                     SaveData();
                     return;
                 }
-                string strMiddleCode = dr["middleCode"].ToString();
+                //string strMiddleCode = dr["middleCode"].ToString();
                 string strTargetCode = dr["targetCode"].ToString();
-                if (string.IsNullOrWhiteSpace(strMiddleCode))
-                {
-                    MessageBox.Show("借方科目编码不能为空。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+                //if (string.IsNullOrWhiteSpace(strMiddleCode))
+                //{
+                //    MessageBox.Show("借方科目编码不能为空。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //    return;
+                //}
                 if (string.IsNullOrWhiteSpace(strTargetCode))
                 {
                     MessageBox.Show("贷方科目编码不能为空。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                DataRow[] drc = CodeCstDataSource.Select(string.Format("middleCode = '{0}' AND targetCode = '{1}'", strMiddleCode, strTargetCode));
+                DataRow[] drc = CodeCstDataSource.Select(string.Format("targetCode = '{0}'",  strTargetCode));
                 if (drc.Length > 1)
                 {
-                    MessageBox.Show(string.Format("借方科目编码{0}贷方科目编码{1}的行存在若干重复行", strMiddleCode, strTargetCode), "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(string.Format("贷方科目编码{0}的行存在若干重复行",  strTargetCode), "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 SaveData();
