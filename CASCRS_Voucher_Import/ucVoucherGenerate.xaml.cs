@@ -42,6 +42,8 @@ namespace CASCRS_Voucher_Import
         private DataTable dtMiddleCode = null;
         private DataTable dtDepartment = null;
         private bool IsImportEnded = false;
+        //凭证第一行不触发事件
+        private int loadTimes ;
         public DataTable ExcelDataSource { get; set; }
         public ucVoucherGenerate()
         {
@@ -58,6 +60,7 @@ namespace CASCRS_Voucher_Import
                 tc.Context.Session.Id = Guid.NewGuid().ToString();
                 tc.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
                 tc.TrackPageView("中科腐蚀研究院凭证导入工具");
+                SetDataTable();
 
                 //StringBuilder sbSQL = new StringBuilder();
                 //sbSQL.AppendLine("SELECT DISTINCT");
@@ -215,11 +218,34 @@ namespace CASCRS_Voucher_Import
                 throw ex;
             }
         }
+        /// <summary>
+        /// 填充凭证明细
+        /// </summary>
+        private void FillVoucherDetailGrid(DataRow dr)
+        {
+            int iPeriod = Convert.ToInt32(dr["期间"]);
+            int inoid = Convert.ToInt32(dr["凭证编号"]);
 
+            DataRow[] drcVD = dtVoucherDetail.Select(string.Format("iperiod = {0} AND ino_id = {1}", iPeriod, inoid));
+            if (drcVD.Length > 0)
+            {
+                SetVoucherDetailGrid(drcVD.CopyToDataTable());
+            }
+            else
+            {
+                SetVoucherDetailGrid(dtVoucherDetail.Clone());
+            }
+        }
         private void gcVoucherHeader_CurrentItemChanged(object sender, CurrentItemChangedEventArgs e)
         {
             try
             {
+                if (loadTimes ==1)
+                {
+                    loadTimes = 2;
+                    return;
+                }
+
                 if (e == null)
                     return;
                 if (e.NewItem == null)
@@ -227,21 +253,10 @@ namespace CASCRS_Voucher_Import
                 DataRow dr = ((DataRowView)e.NewItem).Row;
                 if (dr.RowState == DataRowState.Deleted || dr.RowState == DataRowState.Detached)
                     return;
-
+                FillVoucherDetailGrid(dr);
                 //int iPeriod = Convert.ToInt32(dr["iperiod"]);
                 //int inoid = Convert.ToInt32(dr["real_inoid"]);
-                int iPeriod = Convert.ToInt32(dr["期间"]);
-                int inoid = Convert.ToInt32(dr["凭证编号"]);
-
-                DataRow[] drcVD = dtVoucherDetail.Select(string.Format("iperiod = {0} AND ino_id = {1}", iPeriod, inoid));
-                if (drcVD.Length > 0)
-                {
-                    SetVoucherDetailGrid(drcVD.CopyToDataTable());
-                }
-                else
-                {
-                    SetVoucherDetailGrid(dtVoucherDetail.Clone());
-                }
+                
             }
             catch (Exception ex)
             {
@@ -312,7 +327,7 @@ namespace CASCRS_Voucher_Import
                 object objCurrentItem = gcVoucherHeader.CurrentItem;
                 if (objCurrentItem == null) return;
                 if (dtVoucherDetail == null) return;
-                var drVoucher = ((DataRowView)objCurrentItem).Row;
+                DataRow drVoucher = ((DataRowView)objCurrentItem).Row;
                 if ((Boolean)(drVoucher[0]) == true)
                 {
                     drVoucher[0] = false;
@@ -320,6 +335,14 @@ namespace CASCRS_Voucher_Import
                 else
                 {
                     drVoucher[0] = true;
+                }
+
+                if (loadTimes == 2)
+                {
+                    int rowIndex = gcVoucherHeader.FindRowByValue("凭证编号", drVoucher[4]);
+                    if (rowIndex == 0)
+                        FillVoucherDetailGrid(drVoucher);
+                    loadTimes = 0;
                 }
 
                 //DataRow[] drcResult = dtVoucherDetail.Select(String.Format("唯一标识 ='{0}'", drVoucher["唯一标识"]));
@@ -625,8 +648,8 @@ namespace CASCRS_Voucher_Import
                     DataRow drVH = dtVoucherHeader.NewRow();
                     drVH["是否保存"] = false;
                     drVH["凭证号"] = drIM[0];
-                    drVH["年度"] = drIM[2];
                     drVH["期间"] = drIM[1];
+                    drVH["年度"] = drIM[2];
                     drVH["凭证编号"] = drIM[3];
                     dtVoucherHeader.Rows.Add(drVH);
                 }
@@ -663,7 +686,9 @@ namespace CASCRS_Voucher_Import
                 sbSQL.AppendLine("    glav.iyear, glav.iperiod, glav.ino_id");
                 
                 dtVoucherDetail = DbOperation.GetDataTable(sbSQL.ToString(), 1);
+                loadTimes = 1;
                 gcVoucherHeader.ItemsSource = dtVoucherHeader;
+
                 SetVoucherDetailGrid(dtVoucherDetail);
                 //sbSQL.Clear();
                 //sbSQL.AppendLine("SELECT");
@@ -672,7 +697,7 @@ namespace CASCRS_Voucher_Import
                 //sbSQL.AppendLine("    GL_CashTable AS glct");
 
                 //dtVoucherCash = DbOperation.GetDataTable(sbSQL.ToString(), 1);
-                SetDataTable();
+                //SetDataTable();
             }
             catch (Exception ex)
             {
@@ -765,14 +790,14 @@ namespace CASCRS_Voucher_Import
                     string strMiddleCode = drVD["ccode"].ToString();
                     string strMiddleDeptId = drVD["cdept_id"].ToString();
                     string strTargetCode = null;
-                    string strTargetName = null;
+                    //string strcdigest = null;
                     drVD.BeginEdit();
                     //会计科目对照
                     DataRow[] drcCodeCst = dtCodeCst.Select(string.Format("middleCode = '{0}'", strMiddleCode));
                     if (drcCodeCst.Length > 0)
                     {
                         strTargetCode = drcCodeCst[0]["targetCode"].ToString();
-                        strTargetName = drcCodeCst[0]["targetCodeName"].ToString();
+                        //strTargetName = drcCodeCst[0]["targetCodeName"].ToString();
                     }
                     bool bItem = false;
                     bool bDept = false;
@@ -886,8 +911,8 @@ namespace CASCRS_Voucher_Import
                         if (drcCodeAdd.Length > 0)
                         {
                             DataRow drCode = drcCodeAdd[0];
-                            object[] items = dtVDMergeCopy.Rows[dtVDMergeCopy.Rows.Count - 1].ItemArray;
-
+                            object[] items = dtVDMergeCopy.Rows[0].ItemArray;
+                            
                             dtVDMergeCopy.Rows.Add(items);//加新的凭证
                             DataRow drVDPrev = dtVDMergeCopy.Rows[dtVDMergeCopy.Rows.Count - 1];
                             drVDPrev.BeginEdit();
@@ -896,7 +921,7 @@ namespace CASCRS_Voucher_Import
                             drVDPrev["ccodeexch_equal"] = DBNull.Value;
                             drVDPrev["inid"] = inid;
                             drVDPrev["tvouchtime"] = DateTime.Now;
-                            drVDPrev["cdigest"] = drCode["targetCodeName"];
+                            //drVDPrev["cdigest"] = drCode["targetCodeName"];
                             drVDPrev["ccode"] = drCode["targetCode"];
                             drVDPrev["mc"] = mds - mcs;
                             drVDPrev["md"] = 0;
